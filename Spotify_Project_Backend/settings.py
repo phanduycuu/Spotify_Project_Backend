@@ -37,6 +37,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    'album',
+    'video',
 ]
 
 MIDDLEWARE = [
@@ -75,8 +78,12 @@ WSGI_APPLICATION = 'Spotify_Project_Backend.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'spotify',  # Tên database
+        'USER': 'postgres',  # Tên user
+        'PASSWORD': '190503',  # Mật khẩu
+        'HOST': 'localhost',  # Hoặc IP của database server
+        'PORT': '5432',  # Cổng mặc định của PostgreSQL
     }
 }
 
