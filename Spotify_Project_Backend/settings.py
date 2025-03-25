@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'video',
     'artist',
     'song',
+    'singer',
 ]
 
 MIDDLEWARE = [
