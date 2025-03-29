@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'singer',
     'account',
     'role',
+    'favourite_album'
 ]
 
 MIDDLEWARE = [

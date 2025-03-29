@@ -30,4 +30,5 @@ urlpatterns = [
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/account/', include('account.urls')),
     path('api/roles/', include('role.urls')),
+    path('api/favourite-albums/', include('favourite_album.urls')),
 ]
