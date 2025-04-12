@@ -31,4 +31,5 @@ urlpatterns = [
     path('api/account/', include('account.urls')),
     path('api/roles/', include('role.urls')),
     path('api/favourite-albums/', include('favourite_album.urls')),
+    path('', include('chat.urls')),
 ]

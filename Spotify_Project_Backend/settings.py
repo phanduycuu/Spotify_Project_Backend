@@ -48,10 +48,15 @@ INSTALLED_APPS = [
     'singer',
     'account',
     'role',
-    'favourite_album'
+    'favourite_album',
+    'channels',  # Thêm Django Channels
+    'chat',
+    'friend',
+    "corsheaders",
 ]
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -78,9 +83,9 @@ TEMPLATES = [
         },
     },
 ]
-
+CORS_ALLOW_ALL_ORIGINS = True
 WSGI_APPLICATION = 'Spotify_Project_Backend.wsgi.application'
-
+ASGI_APPLICATION = 'Spotify_Project_Backend.asgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
@@ -150,4 +155,15 @@ SIMPLE_JWT = {
     "ROTATE_REFRESH_TOKENS": True,  # Cấp refresh token mới khi làm mới access token
     "BLACKLIST_AFTER_ROTATION": True,  # Blacklist refresh token cũ sau khi làm mới
     "AUTH_HEADER_TYPES": ("Bearer",),
+}
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer",
+        # Nếu dùng Redis thì thay bằng:
+        # "BACKEND": "channels_redis.core.RedisChannelLayer",
+        # "CONFIG": {
+        #     "hosts": [("127.0.0.1", 6379)],
+        # },
+    },
 }

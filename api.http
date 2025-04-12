@@ -1,0 +1,34 @@
+GET http://127.0.0.1:8000/api/account/pending_requests/ HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQzMzIzNjk1LCJpYXQiOjE3NDMzMjI3OTUsImp0aSI6IjE5NTVlNzRhNzQwMjRlMTdiNWQyMGM0ZWMyM2YwYzNkIiwidXNlcl9pZCI6Mn0.G75O8sWLenENZxClJRLw-uM-pejydAflwCb2jI0Rdr0
+
+###
+GET http://127.0.0.1:8000/api/account/friends/ HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQzMzA1Njk1LCJpYXQiOjE3NDMzMDQ3OTUsImp0aSI6ImZmYTU5OTM4NmUzNDQyYmU5MmE2NDlhYzBiYjUwNjVhIiwidXNlcl9pZCI6Mn0.aPX3le8JOH65be03Snf9CdttXbPVXQDBcYqTJmKTVLM
+
+###
+POST http://127.0.0.1:8000/api/account/1/send_friend_request/ HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQzMzM4NTM2LCJpYXQiOjE3NDMzMzc2MzYsImp0aSI6IjBmYWM1MTg5NmVkMTQ2NzI5NDA2ODMxMzg2ZjYxMWM2IiwidXNlcl9pZCI6M30.0Z-XnrdAPRyJSlLmr_DhHTrRo1F2XnWUgOXKmUGL-NE
+
+
+###
+POST http://127.0.0.1:8000/api/account/2/respond_friend_request/ HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQzMzA4MDEwLCJpYXQiOjE3NDMzMDcxMTAsImp0aSI6IjAxMmQ0OWM4ZjkzMzQwYWM4YmY0NjMyZGM2ZDY0NDIxIiwidXNlcl9pZCI6MX0.zN9o0SYzHDnNJjlIyKEqW18a20S_RcZXLZeuu3ClLEU
+
+{
+  "action": "accept"
+}
+
+###
+POST http://127.0.0.1:8000/api/employees/ HTTP/1.1
+Content-Type:  : application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQzMDgwNDQ1LCJpYXQiOjE3NDMwODAxNDUsImp0aSI6ImM3NDhkZGYxZDdiYzRkYzZhZWI2NmQxNzAzYjMzMDhjIiwidXNlcl9pZCI6MX0.SwGwPaU2hYHyNzmb7GE21RPQ0PTf8PwHgWu1Qw-Gm20
+
+{   
+    "position": "NV",
+    "name": "cuu",
+    "phone_number": "0368166471",
+    "email": "0cauchin0@gmail.com",
+    "is_deleted": false,
+    "department": 1
+}
