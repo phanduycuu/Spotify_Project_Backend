@@ -1,13 +1,13 @@
 from django.db import models
 
-# Create your models here.
 class Video(models.Model):
+    title = models.CharField(max_length=255, verbose_name="Tiêu đề video")  # Thêm field title
     video_url = models.CharField(max_length=255, verbose_name="Đường dẫn")
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Ngày tạo")
     is_deleted = models.BooleanField(default=False, verbose_name="Đã xóa")
 
     def __str__(self):
-        return self.name
+        return self.title  # Sửa để trả về title thay vì name
 
     class Meta:
         db_table = 'videos'

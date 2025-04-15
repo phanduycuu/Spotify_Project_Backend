@@ -48,7 +48,8 @@ INSTALLED_APPS = [
     'singer',
     'account',
     'role',
-    'favourite_album'
+    'favourite_album',
+    'songClient',
 ]
 
 MIDDLEWARE = [
@@ -88,7 +89,7 @@ WSGI_APPLICATION = 'Spotify_Project_Backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'spotify',  # Tên database
+        'NAME': 'spotiify',  # Tên database
         'USER': 'postgres',  # Tên user
         'PASSWORD': '190503',  # Mật khẩu
         'HOST': 'localhost',  # Hoặc IP của database server
@@ -151,3 +152,6 @@ SIMPLE_JWT = {
     "BLACKLIST_AFTER_ROTATION": True,  # Blacklist refresh token cũ sau khi làm mới
     "AUTH_HEADER_TYPES": ("Bearer",),
 }
+# Thêm vào cuối file settings.py
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'

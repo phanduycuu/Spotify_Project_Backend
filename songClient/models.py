@@ -1,0 +1,1 @@
+from song.models import Song  # Import model từ song
