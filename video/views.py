@@ -1,12 +1,15 @@
-from django.shortcuts import render
-from rest_framework import generics
+from rest_framework import viewsets, status
+from rest_framework.response import Response
 from .models import Video
 from .serializers import VideoSerializer
-# Create your views here.
-class VideoListCreate(generics.ListCreateAPIView):
-    queryset = Video.objects.filter(is_deleted=False)
-    serializer_class = VideoSerializer
 
-class VideoRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Video.objects.all()
+class VideoViewSet(viewsets.ModelViewSet):
+    queryset = Video.objects.filter(is_deleted=False).order_by('-created_at')
     serializer_class = VideoSerializer
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        serializer = self.get_serializer(queryset, many=True)
+        return Response({
+            'count': queryset.count(),
+            'results': serializer.data
+        }, status=status.HTTP_200_OK)

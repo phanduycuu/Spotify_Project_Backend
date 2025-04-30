@@ -6,7 +6,7 @@ from artist.models import Artist
 class Song(models.Model):
     album = models.ForeignKey(Album, on_delete=models.CASCADE,null=True, blank=True, verbose_name="Album", related_name="album_songs")
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Ngày tạo")
-    audio_url = models.CharField(max_length=255, verbose_name="Đường dẫn")
+    audio_url = models.FileField(upload_to='songs/', verbose_name="File nhạc")
     duration = models.IntegerField(verbose_name="Thời lượng (giây)")
     lyrics = models.CharField(max_length=1000, verbose_name="Lời bài hát")
     name = models.CharField(max_length=255, verbose_name="Tên bài hát")

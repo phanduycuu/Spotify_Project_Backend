@@ -1,7 +1,7 @@
-from django.urls import path
-from .views import AlbumListCreate, AlbumRetrieveUpdateDestroy
+from rest_framework.routers import DefaultRouter
+from .views import AlbumViewSet
 
-urlpatterns = [
-    path('', AlbumListCreate.as_view()),
-    path('<int:pk>/', AlbumRetrieveUpdateDestroy.as_view()),
-]
+router = DefaultRouter()
+router.register(r'', AlbumViewSet, basename='album')
+
+urlpatterns = router.urls
