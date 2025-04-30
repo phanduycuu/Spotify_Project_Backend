@@ -32,6 +32,7 @@ urlpatterns = [
     path('api/account/', include('account.urls')),
     path('api/roles/', include('role.urls')),
     path('api/favourite-albums/', include('favourite_album.urls')),
+    path('', include('chat.urls')),
     path('api/client/songs/', include('songClient.urls')),  # API cho client
     path('api/songs/', include('song.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

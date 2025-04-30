@@ -5,6 +5,9 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from django.contrib.auth import authenticate
 from rest_framework_simplejwt.tokens import RefreshToken
 from .models import Account
+from friend.models import Friend
+from friend.serializers import FriendSerializer
+from django.db import models
 from .serializers import AccountSerializer,LoginSerializer,LogoutSerializer,UpdateProfieSerializer
 
 # Create your views here.
@@ -88,3 +91,73 @@ class AccountViewSet(viewsets.ModelViewSet):
     def me(self, request):
         """API Lấy thông tin user hiện tại"""
         return Response(AccountSerializer(request.user).data)
+    
+
+    
+    @action(detail=True, methods=['post'], permission_classes=[IsAuthenticated])
+    def send_friend_request(self, request, pk=None):
+        """API gửi lời mời kết bạn"""
+        user1 = request.user
+        try:
+            user2 = Account.objects.get(pk=pk)
+            if user1 == user2:
+                return Response({"error": "Không thể kết bạn với chính mình"}, status=status.HTTP_400_BAD_REQUEST)
+
+            friendship, created = Friend.objects.get_or_create(
+                user1=user1, user2=user2, defaults={"status": "pending"}
+            )
+
+            if not created and friendship.status == "accepted":
+                return Response({"error": "Hai người đã là bạn bè"}, status=status.HTTP_400_BAD_REQUEST)
+
+            return Response({"message": "Lời mời kết bạn đã được gửi"}, status=status.HTTP_201_CREATED)
+
+        except Account.DoesNotExist:
+            return Response({"error": "Người dùng không tồn tại"}, status=status.HTTP_404_NOT_FOUND)
+
+
+    @action(detail=True, methods=['post'], permission_classes=[IsAuthenticated])
+    def respond_friend_request(self, request, pk=None):
+        """API chấp nhận hoặc từ chối lời mời kết bạn"""
+        user2 = request.user
+        action = request.data.get("action")
+
+        if action not in ["accept", "decline"]:
+            return Response({"error": "Hành động không hợp lệ"}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            friendship = Friend.objects.get(user1__id=pk, user2=user2, status="pending")
+
+            if action == "accept":
+                friendship.status = "accepted"
+                friendship.save()
+                return Response({"message": "Đã chấp nhận lời mời kết bạn"}, status=status.HTTP_200_OK)
+
+            elif action == "decline":
+                friendship.status = "declined"
+                friendship.save()
+                return Response({"message": "Đã từ chối lời mời kết bạn"}, status=status.HTTP_200_OK)
+
+        except friendship.DoesNotExist:
+            return Response({"error": "Không tìm thấy lời mời kết bạn"}, status=status.HTTP_404_NOT_FOUND)
+
+
+
+
+
+    @action(detail=False, methods=['get'], permission_classes=[IsAuthenticated])
+    def friends(self, request):
+        """API lấy danh sách bạn bè"""
+        user = request.user
+        friends = Account.objects.filter(
+            models.Q(friends1__user2=user, friends1__status="accepted") | 
+            models.Q(friends2__user1=user, friends2__status="accepted")
+        )
+        return Response(AccountSerializer(friends, many=True).data, status=status.HTTP_200_OK)
+
+    @action(detail=False, methods=['get'], permission_classes=[IsAuthenticated])
+    def pending_requests(self, request):
+        """API lấy danh sách lời mời kết bạn đang chờ"""
+        user = request.user
+        requests = Friend.objects.filter(user2=user, status="pending")
+        return Response(FriendSerializer(requests, many=True).data, status=status.HTTP_200_OK)
