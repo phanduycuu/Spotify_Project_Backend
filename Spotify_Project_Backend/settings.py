@@ -89,7 +89,7 @@ WSGI_APPLICATION = 'Spotify_Project_Backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'spotiify',  # Tên database
+        'NAME': 'spotify',  # Tên database
         'USER': 'postgres',  # Tên user
         'PASSWORD': '190503',  # Mật khẩu
         'HOST': 'localhost',  # Hoặc IP của database server

@@ -1,6 +1,6 @@
 ## 1. Create and InSert Database Mysql
 ```
-create database name:  workassignment
+create database name:  spotify
 insert data
 ```
 ## 2. Setup and Run
