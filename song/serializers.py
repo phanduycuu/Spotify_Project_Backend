@@ -2,6 +2,9 @@
 from rest_framework import serializers
 from .models import Song
 from mutagen import File
+from album.serializers import AlbumSerializer
+from video.serializers import VideoSerializer
+
 class SongReadSerializer(serializers.ModelSerializer):
     album = AlbumSerializer()
     video = VideoSerializer()

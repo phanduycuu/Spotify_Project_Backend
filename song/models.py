@@ -10,9 +10,9 @@ class Song(models.Model):
     duration = models.IntegerField(verbose_name="Thời lượng (giây)")
     lyrics = models.CharField(max_length=1000, verbose_name="Lời bài hát")
     name = models.CharField(max_length=255, verbose_name="Tên bài hát")
-    artist = models.ForeignKey('Artist', on_delete=models.CASCADE, null=True, blank=True, verbose_name="Nghệ sĩ", related_name="artist_songs")
+    artist = models.ForeignKey(Artist, on_delete=models.CASCADE, null=True, blank=True, verbose_name="Nghệ sĩ", related_name="artist_songs")
     genre = models.CharField(max_length=100, verbose_name="Thể loại", blank=True)
-    video = models.ForeignKey('Video', on_delete=models.CASCADE, null=True, blank=True, verbose_name="Video", related_name="video_songs")
+    video = models.ForeignKey(Video, on_delete=models.CASCADE, null=True, blank=True, verbose_name="Video", related_name="video_songs")
     is_deleted = models.BooleanField(default=False, verbose_name="Đã xóa")
 
     def __str__(self):

@@ -1,7 +1,9 @@
 from django.shortcuts import render
 from .models import Song
-from .serializers import SongSerializer
+from .serializers import SongReadSerializer,SongWriteSerializer
 from rest_framework import filters,viewsets
+from rest_framework.response import Response
+
 # Create your views here.
 class SongViewSet(viewsets.ModelViewSet):
     queryset = Song.objects.filter(is_deleted=False).order_by('-created_at')
