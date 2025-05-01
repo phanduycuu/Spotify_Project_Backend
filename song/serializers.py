@@ -4,11 +4,13 @@ from .models import Song
 from mutagen.mp3 import MP3
 from mutagen import File as MutagenFile
 
-from album.serializers import AlbumSerializer
+from album.serializers import AlbumSongSerializer
 from video.serializers import VideoSerializer
 import tempfile
+
+
 class SongReadSerializer(serializers.ModelSerializer):
-    album = AlbumSerializer()
+    album = AlbumSongSerializer()
     video = VideoSerializer()
 
     class Meta:
