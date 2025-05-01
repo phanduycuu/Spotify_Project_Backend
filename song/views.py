@@ -23,3 +23,8 @@ class SongViewSet(viewsets.ModelViewSet):
             'count': queryset.count(),
             'results': serializer.data
         })
+    def destroy(self, request, *args, **kwargs):
+        song = self.get_object()
+        song.is_deleted = True
+        song.save()
+        return Response(status=status.HTTP_204_NO_CONTENT)

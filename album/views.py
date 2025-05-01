@@ -10,7 +10,6 @@ class AlbumViewSet(viewsets.ModelViewSet):
     queryset = Album.objects.all()
     serializer_class = AlbumSerializer
 
-    
     def get_queryset(self):
         # Chỉ trả về album chưa bị xóa
         return Album.objects.filter(is_deleted=False)
@@ -22,6 +21,12 @@ class AlbumViewSet(viewsets.ModelViewSet):
             'count': queryset.count(),
             'results': serializer.data
         }, status=status.HTTP_200_OK)
+
+    def destroy(self, request, *args, **kwargs):
+        album = self.get_object()
+        album.is_deleted = True
+        album.save()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
     @action(detail=False, methods=['get'], url_path='get-songs/(?P<album_id>[^/.]+)')
     def get_songs(self, request, album_id=None):
