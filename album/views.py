@@ -22,6 +22,12 @@ class AlbumViewSet(viewsets.ModelViewSet):
             'results': serializer.data
         }, status=status.HTTP_200_OK)
 
+    def destroy(self, request, *args, **kwargs):
+        album = self.get_object()
+        album.is_deleted = True
+        album.save()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
     @action(detail=False, methods=['get'], url_path='get-songs/(?P<album_id>[^/.]+)')
     def get_songs(self, request, album_id=None):
         album = get_object_or_404(Album, pk=album_id, is_deleted=False)

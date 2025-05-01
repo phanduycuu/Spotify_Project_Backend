@@ -15,3 +15,8 @@ class ArtistViewSet(viewsets.ModelViewSet):
             "count": queryset.count(),
             "results": serializer.data
         })
+    def destroy(self, request, *args, **kwargs):
+        artist = self.get_object()
+        artist.is_deleted = True
+        artist.save()
+        return Response(status=status.HTTP_204_NO_CONTENT)
