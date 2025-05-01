@@ -30,4 +30,9 @@ class AlbumSerializer(serializers.ModelSerializer):
         request = self.context.get('request')  # 👈 lấy request từ context
         songs = obj.album_songs.filter(is_deleted=False)
         return SongSerializer(songs, many=True, context={'request': request}).data  # 👈 truyền request vào đây
+    def update(self, instance, validated_data):
+        # Nếu img_url không được gửi lên hoặc giá trị là None thì giữ nguyên ảnh cũ
+        if 'img_url' not in validated_data or validated_data.get('img_url') is None:
+            validated_data['img_url'] = instance.img_url
+        return super().update(instance, validated_data)
 

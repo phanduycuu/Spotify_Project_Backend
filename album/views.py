@@ -10,7 +10,6 @@ class AlbumViewSet(viewsets.ModelViewSet):
     queryset = Album.objects.all()
     serializer_class = AlbumSerializer
 
-    
     def get_queryset(self):
         # Chỉ trả về album chưa bị xóa
         return Album.objects.filter(is_deleted=False)
