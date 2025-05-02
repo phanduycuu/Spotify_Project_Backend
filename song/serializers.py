@@ -6,16 +6,19 @@ from mutagen import File as MutagenFile
 
 from album.serializers import AlbumSongSerializer
 from video.serializers import VideoSerializer
+from singer.serializers import SingerArtistSerializer
 import tempfile
 
 
 class SongReadSerializer(serializers.ModelSerializer):
     album = AlbumSongSerializer()
     video = VideoSerializer()
+    song_singers = SingerArtistSerializer(many=True)
 
     class Meta:
         model = Song
         fields = '__all__'
+        
 
 
 class SongWriteSerializer(serializers.ModelSerializer):
