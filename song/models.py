@@ -7,6 +7,7 @@ class Song(models.Model):
     album = models.ForeignKey(Album, on_delete=models.CASCADE, null=True, blank=True, verbose_name="Album", related_name="album_songs")
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Ngày tạo")
     audio_url = models.FileField(upload_to='songs/', verbose_name="File nhạc")  # Đổi sang FileField
+    img_url = models.FileField(upload_to='songs/imgs', verbose_name="Ảnh bìa",null=True, blank=True)
     duration = models.IntegerField(verbose_name="Thời lượng (giây)",null=True, blank=True)
     lyrics = models.CharField(max_length=1000, verbose_name="Lời bài hát",null=True, blank=True)
     name = models.CharField(max_length=255, verbose_name="Tên bài hát")

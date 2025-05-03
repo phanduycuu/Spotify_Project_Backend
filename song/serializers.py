@@ -23,7 +23,7 @@ class SongReadSerializer(serializers.ModelSerializer):
 
 class SongWriteSerializer(serializers.ModelSerializer):
     audio_url = serializers.FileField(required=False)  # 👈 Không bắt buộc khi cập nhật
-
+    img_url = serializers.FileField(required=False)
     class Meta:
         model = Song
         fields = '__all__'
@@ -46,6 +46,7 @@ class SongWriteSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         audio_file = validated_data.get('audio_url', None)
+        img_file = validated_data.get('img_url', None)
 
         if audio_file:
             with tempfile.NamedTemporaryFile(delete=False, suffix=".mp3") as temp_file:
@@ -62,5 +63,8 @@ class SongWriteSerializer(serializers.ModelSerializer):
         else:
             validated_data['audio_url'] = instance.audio_url
             validated_data['duration'] = instance.duration
+
+        if not img_file:
+            validated_data['img_url'] = instance.img_url
 
         return super().update(instance, validated_data)
