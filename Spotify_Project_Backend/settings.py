@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
     'rest_framework',
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
@@ -54,6 +55,10 @@ INSTALLED_APPS = [
     'chat',
     'friend',
     "corsheaders",
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
 ]
 
 MIDDLEWARE = [
@@ -66,6 +71,41 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+AUTHENTICATION_BACKENDS = [
+    # Backend xác thực mặc định của Django
+    'django.contrib.auth.backends.ModelBackend',
+    
+    # Backend xác thực của `allauth`
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+
+SITE_ID = 1
+
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'  # Hoặc 'optional' nếu không muốn xác thực email
+ACCOUNT_ADAPTER = 'account.adapters.CustomAccountAdapter'  # Chúng ta sẽ tạo adapter này sau
+SOCIALACCOUNT_ADAPTER = 'account.adapters.CustomSocialAccountAdapter' 
+
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'SCOPE': [
+            'profile',
+            'email',
+        ],
+        'AUTH_PARAMS': {
+            'access_type': 'online',
+        }
+    }
+}
+
+# Đường dẫn sau khi đăng nhập và đăng xuất thành công
+LOGIN_REDIRECT_URL = '/'  # Thay đổi theo nhu cầu
+LOGOUT_REDIRECT_URL = '/'
+
+
 
 ROOT_URLCONF = 'Spotify_Project_Backend.urls'
 

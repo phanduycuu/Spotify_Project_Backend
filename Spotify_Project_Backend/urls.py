@@ -35,4 +35,5 @@ urlpatterns = [
     path('', include('chat.urls')),
     path('api/client/songs/', include('songClient.urls')),  # API cho client
     path('api/songs/', include('song.urls')),
+    path('accounts/', include('allauth.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
