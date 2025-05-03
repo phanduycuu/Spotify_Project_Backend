@@ -1,5 +1,5 @@
 from django.db import models
-from account.models import Account
+from accounts.models import Account
 from album.models import Album
 # Create your models here.
 class FavouriteAlbum(models.Model):

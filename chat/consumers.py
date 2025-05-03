@@ -3,7 +3,7 @@ from channels.generic.websocket import AsyncWebsocketConsumer
 from django.contrib.auth import get_user_model
 from asgiref.sync import sync_to_async
 from .models import Chat, ChatRoom
-from account.models import Account
+from accounts.models import Account
 from django.db import models
 User = get_user_model()
 

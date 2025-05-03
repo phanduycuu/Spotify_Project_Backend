@@ -23,13 +23,14 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
 )
 urlpatterns = [
+    path('admin/', admin.site.urls),
     path('api/albums/', include('album.urls')),
     path('api/videos/', include('video.urls')),
     path('api/artists/', include('artist.urls')),
     path('api/singers/', include('singer.urls')),
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    path('api/account/', include('account.urls')),
+    path('api/account/', include('accounts.urls')),
     path('api/roles/', include('role.urls')),
     path('api/favourite-albums/', include('favourite_album.urls')),
     path('', include('chat.urls')),

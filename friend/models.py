@@ -1,5 +1,5 @@
 from django.db import models
-from account.models import Account
+from accounts.models import Account
 # Create your models here.
 class Friend(models.Model):
     STATUS_CHOICES = [

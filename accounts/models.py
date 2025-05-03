@@ -28,7 +28,7 @@ class Account(AbstractUser):
         blank=True
     )
     birthday = models.DateField(null=True, blank=True)
-    role = models.ForeignKey('role.Role', on_delete=models.CASCADE, related_name="role_accounts")
+    role = models.ForeignKey('role.Role', on_delete=models.CASCADE, related_name="role_accounts", null=True, blank=True)
     is_deleted = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

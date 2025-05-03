@@ -47,7 +47,7 @@ INSTALLED_APPS = [
     'artist',
     'song',
     'singer',
-    'account',
+    'accounts',
     'role',
     'favourite_album',
     'songClient',
@@ -70,6 +70,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
 ]
 
 AUTHENTICATION_BACKENDS = [
@@ -80,14 +81,16 @@ AUTHENTICATION_BACKENDS = [
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
-SITE_ID = 1
-
-ACCOUNT_AUTHENTICATION_METHOD = 'email'
+SITE_ID = 2
+ACCOUNT_USER_MODEL_USERNAME_FIELD = None  # Nếu mô hình của bạn không có trường username
 ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_USERNAME_REQUIRED = False  # Đặt thành False nếu mô hình của bạn không sử dụng username
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_LOGIN_METHODS = {'email'}
+ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*']
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'  # Hoặc 'optional' nếu không muốn xác thực email
-ACCOUNT_ADAPTER = 'account.adapters.CustomAccountAdapter'  # Chúng ta sẽ tạo adapter này sau
-SOCIALACCOUNT_ADAPTER = 'account.adapters.CustomSocialAccountAdapter' 
+ACCOUNT_ADAPTER = 'accounts.adapters.CustomAccountAdapter'  # Chúng ta sẽ tạo adapter này sau
+SOCIALACCOUNT_ADAPTER = 'accounts.adapters.CustomSocialAccountAdapter' 
 
 SOCIALACCOUNT_PROVIDERS = {
     'google': {
@@ -100,6 +103,7 @@ SOCIALACCOUNT_PROVIDERS = {
         }
     }
 }
+os.environ['NO_PROXY'] = '*'
 
 # Đường dẫn sau khi đăng nhập và đăng xuất thành công
 LOGIN_REDIRECT_URL = '/'  # Thay đổi theo nhu cầu
@@ -183,7 +187,7 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-AUTH_USER_MODEL = 'account.Account'
+AUTH_USER_MODEL = 'accounts.Account'
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
