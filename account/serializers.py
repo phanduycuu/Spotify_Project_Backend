@@ -2,6 +2,8 @@
 from rest_framework import serializers
 
 from .models import Account
+from album_user.serializers import AlbumUserSerializer
+from favourite_album.serializers import FavouriteAlbumUserSerializer
 class AccountSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -31,3 +33,11 @@ class UpdateProfieSerializer(serializers.Serializer):
     full_name = serializers.CharField(max_length=255, required=False, allow_null=True, allow_blank=True)
     sex = serializers.ChoiceField(choices=[('male', 'Nam'), ('female', 'Nữ'), ('other', 'Khác')], required=False, allow_null=True)
     birthday = serializers.DateField(required=False, allow_null=True)
+
+class AccountReadSerializer(serializers.ModelSerializer):
+    account_favourite_albums = FavouriteAlbumUserSerializer(many=True, read_only=True)
+    account_albums = AlbumUserSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Account
+        fields = ['id', 'email', 'full_name', 'sex', 'birthday', 'role', 'account_favourite_albums', 'account_albums']

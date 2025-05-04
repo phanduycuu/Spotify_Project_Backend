@@ -1,4 +1,4 @@
-from rest_framework import viewsets, status
+from rest_framework import viewsets, status,filters
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -8,11 +8,14 @@ from .models import Account
 from friend.models import Friend
 from friend.serializers import FriendSerializer
 from django.db import models
-from .serializers import AccountSerializer,LoginSerializer,LogoutSerializer,UpdateProfieSerializer
+from .serializers import AccountSerializer,LoginSerializer,LogoutSerializer,UpdateProfieSerializer,AccountReadSerializer
 
 # Create your views here.
 class AccountViewSet(viewsets.ModelViewSet):
-    queryset = Account.objects.all()
+    queryset = Account.objects.filter(is_deleted=False)
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    search_fields = ['email']
+    ordering_fields = ['email']
     serializer_class = AccountSerializer
 
     @action(detail=False, methods=['post'], permission_classes=[AllowAny])
@@ -29,7 +32,7 @@ class AccountViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=['post'], permission_classes=[AllowAny], serializer_class=LoginSerializer)
     def login(self, request):
-        """API Đăng nhập bằng email và trả về JWT"""
+        """API Đăng nhập bằng email và trả về JWT + thông tin tài khoản + album"""
         serializer = self.get_serializer(data=request.data)
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -42,10 +45,11 @@ class AccountViewSet(viewsets.ModelViewSet):
             return Response({"error": "Sai email hoặc mật khẩu"}, status=status.HTTP_400_BAD_REQUEST)
 
         refresh = RefreshToken.for_user(user)
+
         return Response({
             "refresh": str(refresh),
             "access": str(refresh.access_token),
-            "user": AccountSerializer(user).data
+            "user": AccountReadSerializer(user, context={'request': request}).data  # dùng serializer có album + favourite
         }, status=status.HTTP_200_OK)
         
     @action(detail=False, methods=['post'], permission_classes=[AllowAny], serializer_class=LogoutSerializer)

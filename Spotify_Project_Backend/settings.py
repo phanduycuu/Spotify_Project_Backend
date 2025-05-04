@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
+    "django_filters",
     'album',
     'video',
     'artist',
@@ -53,6 +54,8 @@ INSTALLED_APPS = [
     'channels',  # Thêm Django Channels
     'chat',
     'friend',
+    'album_song',
+    'album_user',
     "corsheaders",
 ]
 
@@ -148,6 +151,10 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
         'rest_framework.authentication.SessionAuthentication',
+    ],
+    'DEFAULT_FILTER_BACKENDS': [
+        'django_filters.rest_framework.DjangoFilterBackend',
+        # 'rest_framework.filters.SearchFilter',  # vẫn giữ để dùng `?search=`
     ]
 }
 SIMPLE_JWT = {

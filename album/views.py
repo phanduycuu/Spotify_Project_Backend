@@ -1,4 +1,4 @@
-from rest_framework import viewsets, status
+from rest_framework import viewsets, status,filters
 from rest_framework.response import Response
 from .models import Album
 from .serializers import AlbumSerializer,SongSerializer
@@ -7,15 +7,15 @@ from song.serializers import SongReadSerializer
 from rest_framework.decorators import action
 from django.shortcuts import get_object_or_404
 class AlbumViewSet(viewsets.ModelViewSet):
-    queryset = Album.objects.all()
+    queryset = Album.objects.filter(is_deleted=False)
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    search_fields = ['name']
+    ordering_fields = ['name']
     serializer_class = AlbumSerializer
 
-    def get_queryset(self):
-        # Chỉ trả về album chưa bị xóa
-        return Album.objects.filter(is_deleted=False)
 
     def list(self, request, *args, **kwargs):
-        queryset = self.get_queryset()
+        queryset = self.filter_queryset(self.get_queryset())
         serializer = self.get_serializer(queryset, many=True, context={'request': request})
         return Response({
             'count': queryset.count(),

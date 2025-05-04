@@ -1,4 +1,4 @@
-from rest_framework import viewsets,status
+from rest_framework import viewsets,status,filters
 from rest_framework.response import Response
 from .models import Artist
 from .serializers import ArtistSerializer
@@ -6,6 +6,9 @@ from .serializers import ArtistSerializer
 class ArtistViewSet(viewsets.ModelViewSet):
     serializer_class = ArtistSerializer
     queryset = Artist.objects.filter(is_deleted=False)
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    search_fields = ['name']
+    ordering_fields = ['name']
 
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
