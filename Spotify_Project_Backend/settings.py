@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     'friend',
     'album_song',
     'album_user',
+    'favourite_song',
     "corsheaders",
 ]
 

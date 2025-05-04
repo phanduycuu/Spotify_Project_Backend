@@ -4,6 +4,7 @@ from rest_framework import serializers
 from .models import Account
 from album_user.serializers import AlbumUserSerializer
 from favourite_album.serializers import FavouriteAlbumUserSerializer
+from favourite_song.serializers import FavouriteSongUserSerializer
 class AccountSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -37,7 +38,8 @@ class UpdateProfieSerializer(serializers.Serializer):
 class AccountReadSerializer(serializers.ModelSerializer):
     account_favourite_albums = FavouriteAlbumUserSerializer(many=True, read_only=True)
     account_albums = AlbumUserSerializer(many=True, read_only=True)
+    account_favourite_songs= FavouriteSongUserSerializer(many=True, read_only=True)
 
     class Meta:
         model = Account
-        fields = ['id', 'email', 'full_name', 'sex', 'birthday', 'role', 'account_favourite_albums', 'account_albums']
+        fields = ['id', 'email', 'full_name', 'sex', 'birthday', 'role', 'account_favourite_albums', 'account_albums','account_favourite_songs']
