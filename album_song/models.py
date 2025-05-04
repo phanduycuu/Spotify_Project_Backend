@@ -5,6 +5,7 @@ from song.models import Song
 class AlbumSong(models.Model):
     album_user = models.ForeignKey(AlbumUser, on_delete=models.CASCADE, verbose_name="album_user", related_name="album_user_song")
     song = models.ForeignKey(Song, on_delete=models.CASCADE, verbose_name="song", related_name="song_album_user")
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Ngày tạo")
     is_deleted = models.BooleanField(default=False, verbose_name="Đã xóa")
 
     class Meta:
