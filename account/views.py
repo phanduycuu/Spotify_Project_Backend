@@ -13,6 +13,8 @@ from django.shortcuts import get_object_or_404
 from album.serializers import AlbumSerializer
 from album_user.serializers import AlbumUserSerializer
 from song.serializers import SongReadSerializer
+from favourite_album.serializers import FavouriteAlbumUserSerializer
+from favourite_song.serializers import FavouriteSongUserSerializer
 # Create your views here.
 class AccountViewSet(viewsets.ModelViewSet):
     queryset = Account.objects.filter(is_deleted=False)
@@ -187,11 +189,8 @@ class AccountViewSet(viewsets.ModelViewSet):
     def get_favourite_albums(self, request, account_id=None):
         account = get_object_or_404(Account, pk=account_id, is_deleted=False)
         favourite_relations = account.account_favourite_albums.filter(is_deleted=False).select_related('album')
-        albums = [fav.album for fav in favourite_relations]  # 👉 Lấy danh sách Album
-        serializer = AlbumSerializer(albums, many=True, context={'request': request})
-        return Response(
-            serializer.data
-       , status=status.HTTP_200_OK)
+        serializer = FavouriteAlbumUserSerializer(favourite_relations, many=True, context={'request': request})
+        return Response(serializer.data, status=status.HTTP_200_OK)
     
     @action(detail=False, methods=['get'], url_path='get-albums/(?P<account_id>[^/.]+)')
     def get_albums(self, request, account_id=None):
@@ -204,8 +203,7 @@ class AccountViewSet(viewsets.ModelViewSet):
     def get_favourite_songs(self, request, account_id=None):
         account = get_object_or_404(Account, pk=account_id, is_deleted=False)
         favourite_relations = account.account_favourite_songs.filter(is_deleted=False).select_related('song')
-        songs = [fav.song for fav in favourite_relations]  # 👉 Lấy danh sách Album
-        serializer = SongReadSerializer(songs, many=True, context={'request': request})
+        serializer = FavouriteSongUserSerializer(favourite_relations, many=True, context={'request': request})
         return Response(
             serializer.data
        , status=status.HTTP_200_OK)

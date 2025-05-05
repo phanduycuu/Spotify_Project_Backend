@@ -13,3 +13,4 @@ class FavouriteAlbumUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = FavouriteAlbum
         fields = '__all__'
+
