@@ -1,7 +1,6 @@
 # 🎧 Spotify Clone - Backend
 
-Đây là phần **backend** của dự án Spotify Clone, được phát triển bằng **Django** và **Django REST Framework**. Hệ thống cung cấp các API phục vụ cho frontend và admin frontend.
-
+Hướng dẫn cài đặt
 ---
 
 ### 🚀 Công nghệ sử dụng
@@ -9,9 +8,9 @@
 - Python 3.x
 - Django 4.x
 - Django REST Framework
-- SQLite3 (hoặc có thể thay bằng PostgreSQL, MySQL)
+- PostgreSQL
 - Django CORS Headers
-- JWT (Xác thực người dùng - nếu có)
+- JWT (Xác thực người dùng)
 
 ---
 
