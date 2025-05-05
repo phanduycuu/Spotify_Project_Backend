@@ -13,3 +13,6 @@ class FavouriteSong(models.Model):
         db_table = 'favourite_songs'
         verbose_name = "favourite_song"
         verbose_name_plural = "favourite_songs"
+        constraints = [
+            models.UniqueConstraint(fields=['account', 'song'], name='unique_account_song_favourite')
+        ]
