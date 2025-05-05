@@ -1,4 +1,4 @@
-## 1. Create and InSert Database Mysql
+## 1. Create and InSert Database PostgreSQL
 ```
 create database name:  spotify
 insert data
