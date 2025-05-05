@@ -5,11 +5,17 @@ from .models import Account
 from album_user.serializers import AlbumUserSerializer
 from favourite_album.serializers import FavouriteAlbumUserSerializer
 from favourite_song.serializers import FavouriteSongUserSerializer
+from role.serializers import RoleSerializer
+from role.models import Role
 class AccountSerializer(serializers.ModelSerializer):
-
+    role = RoleSerializer(read_only=True)
+    role_id = serializers.PrimaryKeyRelatedField(
+        queryset=Role.objects.all(), write_only=True, source='role'
+    )
     class Meta:
+
         model = Account
-        fields = ['id', 'email', 'password','full_name','sex','birthday', 'role']
+        fields = ['id', 'email', 'password','full_name','sex','birthday', 'role','role_id']
         extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
