@@ -1,7 +1,7 @@
-from django.urls import path
-from .views import VideoListCreate, VideoRetrieveUpdateDestroy
+from rest_framework.routers import DefaultRouter
+from .views import VideoViewSet
 
-urlpatterns = [
-    path('', VideoListCreate.as_view()),
-    path('<int:pk>/', VideoRetrieveUpdateDestroy.as_view()),
-]
+router = DefaultRouter()
+router.register(r'', VideoViewSet, basename='video')
+
+urlpatterns = router.urls

@@ -2,11 +2,20 @@
 from rest_framework import serializers
 
 from .models import Account
+from album_user.serializers import AlbumUserSerializer
+from favourite_album.serializers import FavouriteAlbumUserSerializer
+from favourite_song.serializers import FavouriteSongUserSerializer
+from role.serializers import RoleSerializer
+from role.models import Role
 class AccountSerializer(serializers.ModelSerializer):
-
+    role = RoleSerializer(read_only=True)
+    role_id = serializers.PrimaryKeyRelatedField(
+        queryset=Role.objects.all(), write_only=True, source='role'
+    )
     class Meta:
+
         model = Account
-        fields = ['id', 'email', 'password','full_name','sex','birthday', 'role']
+        fields = ['id', 'email', 'password','full_name','sex','birthday', 'role','role_id']
         extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
@@ -15,6 +24,7 @@ class AccountSerializer(serializers.ModelSerializer):
             email=validated_data['email'],
             password=validated_data['password'],
             role=role,  # Bổ sung role vào đây để tránh lỗi NULL
+            full_name=validated_data['full_name'],
         )
         return user
     def update(self, instance, validated_data):
@@ -31,3 +41,12 @@ class UpdateProfieSerializer(serializers.Serializer):
     full_name = serializers.CharField(max_length=255, required=False, allow_null=True, allow_blank=True)
     sex = serializers.ChoiceField(choices=[('male', 'Nam'), ('female', 'Nữ'), ('other', 'Khác')], required=False, allow_null=True)
     birthday = serializers.DateField(required=False, allow_null=True)
+
+class AccountReadSerializer(serializers.ModelSerializer):
+    account_favourite_albums = FavouriteAlbumUserSerializer(many=True, read_only=True)
+    account_albums = AlbumUserSerializer(many=True, read_only=True)
+    account_favourite_songs= FavouriteSongUserSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Account
+        fields = ['id', 'email', 'full_name', 'sex', 'birthday', 'role', 'account_favourite_albums', 'account_albums','account_favourite_songs']

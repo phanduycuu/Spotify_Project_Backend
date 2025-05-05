@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from pathlib import Path
 from datetime import timedelta
-
+import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
+    "django_filters",
     'album',
     'video',
     'artist',
@@ -50,9 +51,17 @@ INSTALLED_APPS = [
     'role',
     'favourite_album',
     'songClient',
+    'channels',  # Thêm Django Channels
+    'chat',
+    'friend',
+    'album_song',
+    'album_user',
+    'favourite_song',
+    "corsheaders",
 ]
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -79,9 +88,9 @@ TEMPLATES = [
         },
     },
 ]
-
+CORS_ALLOW_ALL_ORIGINS = True
 WSGI_APPLICATION = 'Spotify_Project_Backend.wsgi.application'
-
+ASGI_APPLICATION = 'Spotify_Project_Backend.asgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
@@ -143,6 +152,10 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
         'rest_framework.authentication.SessionAuthentication',
+    ],
+    'DEFAULT_FILTER_BACKENDS': [
+        'django_filters.rest_framework.DjangoFilterBackend',
+        # 'rest_framework.filters.SearchFilter',  # vẫn giữ để dùng `?search=`
     ]
 }
 SIMPLE_JWT = {
@@ -152,6 +165,17 @@ SIMPLE_JWT = {
     "BLACKLIST_AFTER_ROTATION": True,  # Blacklist refresh token cũ sau khi làm mới
     "AUTH_HEADER_TYPES": ("Bearer",),
 }
-# Thêm vào cuối file settings.py
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer",
+        # Nếu dùng Redis thì thay bằng:
+        # "BACKEND": "channels_redis.core.RedisChannelLayer",
+        # "CONFIG": {
+        #     "hosts": [("127.0.0.1", 6379)],
+        # },
+    },
+}
+
 MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
