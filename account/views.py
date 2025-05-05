@@ -107,13 +107,26 @@ class AccountViewSet(viewsets.ModelViewSet):
             if user1 == user2:
                 return Response({"error": "Không thể kết bạn với chính mình"}, status=status.HTTP_400_BAD_REQUEST)
 
-            friendship, created = Friend.objects.get_or_create(
-                user1=user1, user2=user2, defaults={"status": "pending"}
-            )
+            # Kiểm tra tồn tại mối quan hệ bạn bè giữa 2 người, bất kể thứ tự user1-user2
+            friendship = Friend.objects.filter(
+                models.Q(user1=user1, user2=user2) | models.Q(user1=user2, user2=user1)
+            ).first()
 
-            if not created and friendship.status == "accepted":
-                return Response({"error": "Hai người đã là bạn bè"}, status=status.HTTP_400_BAD_REQUEST)
+            if friendship:
+                if friendship.status == "accepted":
+                    return Response({"error": "Hai người đã là bạn bè"}, status=status.HTTP_400_BAD_REQUEST)
+                elif friendship.status == "pending":
+                    return Response({"error": "Lời mời kết bạn đang chờ xác nhận"}, status=status.HTTP_400_BAD_REQUEST)
+                elif friendship.status == "declined":
+                    # Cập nhật lại trạng thái
+                    friendship.user1 = user1
+                    friendship.user2 = user2
+                    friendship.status = "pending"
+                    friendship.save()
+                    return Response({"message": "Lời mời kết bạn đã được gửi lại"}, status=status.HTTP_200_OK)
 
+            # Nếu chưa có mối quan hệ nào
+            Friend.objects.create(user1=user1, user2=user2, status="pending")
             return Response({"message": "Lời mời kết bạn đã được gửi"}, status=status.HTTP_201_CREATED)
 
         except Account.DoesNotExist:
@@ -126,18 +139,18 @@ class AccountViewSet(viewsets.ModelViewSet):
         user2 = request.user
         action = request.data.get("action")
 
-        if action not in ["accept", "decline"]:
+        if action not in ["accepted", "declined"]:
             return Response({"error": "Hành động không hợp lệ"}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
             friendship = Friend.objects.get(user1__id=pk, user2=user2, status="pending")
 
-            if action == "accept":
+            if action == "accepted":
                 friendship.status = "accepted"
                 friendship.save()
                 return Response({"message": "Đã chấp nhận lời mời kết bạn"}, status=status.HTTP_200_OK)
 
-            elif action == "decline":
+            elif action == "declined":
                 friendship.status = "declined"
                 friendship.save()
                 return Response({"message": "Đã từ chối lời mời kết bạn"}, status=status.HTTP_200_OK)

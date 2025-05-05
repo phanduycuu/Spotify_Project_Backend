@@ -18,6 +18,7 @@ class AccountSerializer(serializers.ModelSerializer):
             email=validated_data['email'],
             password=validated_data['password'],
             role=role,  # Bổ sung role vào đây để tránh lỗi NULL
+            full_name=validated_data['full_name'],
         )
         return user
     def update(self, instance, validated_data):
