@@ -2,13 +2,14 @@
 from rest_framework import serializers
 from .models import Album
 from song.models import Song
-
+from singer.serializers import SingerArtistSerializer
 class AlbumSongSerializer(serializers.ModelSerializer):
     class Meta:
         model = Album
         fields = '__all__'
 class SongSerializer(serializers.ModelSerializer):
     audio_url = serializers.SerializerMethodField()
+    song_singers = SingerArtistSerializer(many=True)
 
     class Meta:
         model = Song
