@@ -17,24 +17,52 @@ Hướng dẫn cài đặt
 ### 📁 Cấu trúc thư mục chính
 
 ```bash
-backend/
-├── core/               # App chính: models, views, serializers, urls
-├── backend/            # Cấu hình Django
-├── media/              # Lưu trữ file upload (ảnh, video)
-├── static/             # Tài nguyên tĩnh (nếu có)
+Spotify_Project_Backend/
+├── Spotify_Project_Backend/                         # Cấu hình Django
+│   ├── __init__.py
+│   ├── settings.py
+│   ├── urls.py
+│   ├── wsgi.py
+│   └── asgi.py
+│
+├── apps/                            # Tất cả app được gom tại đây
+│   ├── accounts/                    # Xử lý đăng nhập, đăng ký, quyền
+│   ├── users/                       # Thông tin người dùng (trước là account, album_user)
+│   ├── music/                       # Các app về bài hát và album
+│   │   ├── album/
+│   │   ├── album_song/
+│   │   ├── album_user/
+│   │   ├── song/
+│   │   ├── singer/
+│   │   ├── artist/
+│   │   ├── songClient/
+│   │   ├── favourite_album/
+│   │   └── favourite_song/
+│   ├── chat/                        # Giao tiếp giữa người dùng
+│   ├── video/                       # Truyền thông video
+│   ├── friend/                      # Danh sách bạn bè
+│   ├── role/                        # Phân quyền
+│
+├── media/                           # Upload file
+├── venv/                            # Virtual environment
+│
 ├── manage.py
 ├── requirements.txt
-└── .env                # Biến môi trường (nếu dùng)
+├── .gitignore
+├── README.md
+└── api.http                         # File test API
+
+
 ```
 
 ---
 
 ### ⚙️ Thiết lập môi trường
 
-1. Truy cập thư mục `backend`:
+1. Truy cập thư mục `Spotify_Project_Backend`:
 
 ```bash
-cd backend
+cd Spotify_Project_Backend
 ```
 
 2. Tạo và kích hoạt môi trường ảo:
@@ -98,7 +126,6 @@ Mặc định backend sẽ chạy tại: [http://localhost:8000](http://localhos
 - `GET /api/songs/` – Danh sách bài hát
 - `POST /api/albums/` – Tạo album
 - `GET /api/videos/` – Danh sách video
-- `GET /api/users/me/` – Thông tin người dùng hiện tại
 
 ---
 
