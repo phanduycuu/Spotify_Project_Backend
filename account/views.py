@@ -19,8 +19,8 @@ from favourite_song.serializers import FavouriteSongUserSerializer
 class AccountViewSet(viewsets.ModelViewSet):
     queryset = Account.objects.filter(is_deleted=False)
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
-    search_fields = ['email']
-    ordering_fields = ['email']
+    search_fields = ['email','full_name']
+    ordering_fields = ['email','full_name']
     serializer_class = AccountSerializer
 
     @action(detail=False, methods=['post'], permission_classes=[AllowAny])
