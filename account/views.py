@@ -95,10 +95,10 @@ class AccountViewSet(viewsets.ModelViewSet):
         user.save()
         return Response({"message": "Cập nhật mật khẩu thành công"}, status=status.HTTP_200_OK)
 
-    @action(detail=True, methods=['put'], permission_classes=[AllowAny],serializer_class=UpdateProfieSerializer)
-    def update_profile(self, request, pk=None):
-        """API cập nhật thông tin cá nhân (full_name, sex, birthday)"""
-        user = self.get_object()
+    @action(detail=False, methods=['put'], permission_classes=[IsAuthenticated], serializer_class=UpdateProfieSerializer)
+    def update_profile(self, request):
+        """API cập nhật thông tin cá nhân (full_name, sex, birthday) từ token"""
+        user = request.user  # Lấy người dùng từ token đã xác thực
         data = request.data
 
         user.full_name = data.get("full_name", user.full_name)

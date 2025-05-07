@@ -20,15 +20,13 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiY
 }
 
 ###
-POST http://127.0.0.1:8000/api/employees/ HTTP/1.1
-Content-Type:  : application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQzMDgwNDQ1LCJpYXQiOjE3NDMwODAxNDUsImp0aSI6ImM3NDhkZGYxZDdiYzRkYzZhZWI2NmQxNzAzYjMzMDhjIiwidXNlcl9pZCI6MX0.SwGwPaU2hYHyNzmb7GE21RPQ0PTf8PwHgWu1Qw-Gm20
+###
+PUT http://127.0.0.1:8000/api/account/update_profile/ HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ2NjExOTA3LCJpYXQiOjE3NDY2MTEwMDcsImp0aSI6Ijk0YzE3ZWE5ODNkZDRiNTFhNWVlYjEyZGMxNDJiODhhIiwidXNlcl9pZCI6M30.zdA3zMeOCnRvBmEzvgGvvHxySVkj4wS38UUSYnS6jhs
 
-{   
-    "position": "NV",
-    "name": "cuu",
-    "phone_number": "0368166471",
-    "email": "0cauchin0@gmail.com",
-    "is_deleted": false,
-    "department": 1
+{
+    "full_name": "Cuu",
+    "sex": "Nam",
+    "birthday": "2025-08-05"
 }

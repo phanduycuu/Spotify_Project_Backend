@@ -9,6 +9,6 @@ def get_chat_history(request, room_name):
     Chats = Chat.objects.filter(room=room).order_by("timestamp")
 
     return JsonResponse(
-        [{ "sender": msg.sender.email, "chat": msg.content, "timestamp": msg.timestamp} for msg in Chats],
+        [{ "sender": msg.sender.email, "message": msg.content, "timestamp": msg.timestamp} for msg in Chats],
         safe=False,
     )
