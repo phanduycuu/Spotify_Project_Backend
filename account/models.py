@@ -46,3 +46,4 @@ class Account(AbstractUser):
         db_table = 'accounts'
         verbose_name = "Tài khoản"
         verbose_name_plural = "Các tài khoản"
+       

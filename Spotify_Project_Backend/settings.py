@@ -47,7 +47,7 @@ INSTALLED_APPS = [
     'artist',
     'song',
     'singer',
-    'account',
+    'account.apps.AccountConfig',
     'role',
     'favourite_album',
     'songClient',
