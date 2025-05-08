@@ -15,6 +15,10 @@ from album_user.serializers import AlbumUserSerializer
 from song.serializers import SongReadSerializer
 from favourite_album.serializers import FavouriteAlbumUserSerializer
 from favourite_song.serializers import FavouriteSongUserSerializer
+from google.oauth2 import id_token
+from google.auth.transport import requests
+from django.conf import settings
+from role.models import Role
 # Create your views here.
 class AccountViewSet(viewsets.ModelViewSet):
     queryset = Account.objects.filter(is_deleted=False)
@@ -217,5 +221,70 @@ class AccountViewSet(viewsets.ModelViewSet):
         return Response(
             serializer.data
        , status=status.HTTP_200_OK)
+    
+
+class AuthViewSet(viewsets.ViewSet):
+    @action(methods=['post'], detail=False, url_path='google-login')
+    def google_login(self, request):
+        token = request.data.get('token')
+        if not token:
+            return Response({'error': 'Token không được cung cấp'}, status=400)
+            
+        try:
+            # Xác thực token với Google
+            idinfo = id_token.verify_oauth2_token(
+                token, 
+                requests.Request(), 
+                settings.GOOGLE_CLIENT_ID,
+                clock_skew_in_seconds=10  # Allow some clock skew
+            )
+            
+            # Kiểm tra issuer hợp lệ
+            if idinfo['iss'] not in ['accounts.google.com', 'https://accounts.google.com']:
+                return Response({'error': 'Token không từ Google'}, status=400)
+                
+            # In thông tin gỡ lỗi (có thể xóa ở sản phẩm)
+            print(f"Token hợp lệ. Dữ liệu người dùng: {idinfo}")
+            
+            email = idinfo.get('email')
+            name = idinfo.get('name', '')  # Default empty string if name not provided
+            
+            # Kiểm tra email đã được xác minh chưa
+            if not idinfo.get('email_verified', False):
+                return Response({'error': 'Email chưa được xác minh'}, status=400)
+
+            if not email:
+                return Response({'error': 'Không lấy được email từ Google'}, status=400)
+
+            try:
+                # Tìm hoặc tạo người dùng
+                default_role, _ = Role.objects.get_or_create(name='user')
+                
+                user, created = Account.objects.get_or_create(
+                    email=email,
+                    defaults={
+                        'full_name': name,
+                        'role': default_role,
+                        'is_deleted': False
+                    }
+                )
+
+                # Tạo JWT
+                refresh = RefreshToken.for_user(user)
+                return Response({
+                    'access': str(refresh.access_token),
+                    'refresh': str(refresh),
+                    "user": AccountSerializer(user).data
+                })
+            except Exception as e:
+                print(f"Database error: {str(e)}")
+                return Response({'error': f'Lỗi khi xử lý tài khoản: {str(e)}'}, status=500)
+
+        except ValueError as e:
+            print(f"Token validation error: {str(e)}")
+            return Response({'error': 'Token không hợp lệ hoặc hết hạn'}, status=400)
+        except Exception as e:
+            print(f"Unexpected error: {str(e)}")
+            return Response({'error': f'Lỗi xác thực: {str(e)}'}, status=500)
     
 

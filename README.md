@@ -97,7 +97,7 @@ python manage.py migrate
 ### ▶️ Khởi chạy server
 
 ```bash
-python -m daphne -b 127.0.0.1 -p 8000 projectmanagement_backend.asgi:application
+python -m daphne -b 127.0.0.1 -p 8000 Spotify_Project_Backend.asgi:application
 ```
 
 Mặc định backend sẽ chạy tại: [http://localhost:8000](http://localhost:8000)

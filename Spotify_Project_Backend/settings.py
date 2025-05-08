@@ -89,8 +89,33 @@ TEMPLATES = [
     },
 ]
 CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_METHODS = [
+    "DELETE",
+    "GET",
+    "OPTIONS",
+    "PATCH",
+    "POST",
+    "PUT",
+]
+
+CORS_ALLOW_HEADERS = [
+    "accept",
+    "accept-encoding",
+    "authorization",
+    "content-type",
+    "dnt",
+    "origin",
+    "user-agent",
+    "x-csrftoken",
+    "x-requested-with",
+]
 WSGI_APPLICATION = 'Spotify_Project_Backend.wsgi.application'
 ASGI_APPLICATION = 'Spotify_Project_Backend.asgi.application'
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",  # Frontend URL
+]
+GOOGLE_CLIENT_ID = "343317132434-2lmlvnemjrklo1jmlghs8ujkr35seahu.apps.googleusercontent.com"
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
