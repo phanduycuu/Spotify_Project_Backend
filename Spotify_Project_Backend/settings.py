@@ -28,7 +28,7 @@ SECRET_KEY = 'django-insecure-#xp36btvqx%ynma+!jfvyud#@n2z_++7!k)pza)g$$xti^f(rm
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['*', 'spotify-project-frontend.vercel.app']
 
 
 # Application definition
