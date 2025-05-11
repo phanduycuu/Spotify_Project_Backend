@@ -116,6 +116,7 @@ WSGI_APPLICATION = 'Spotify_Project_Backend.wsgi.application'
 ASGI_APPLICATION = 'Spotify_Project_Backend.asgi.application'
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",  # Frontend URL
+    "https://spotify-project-frontend.vercel.app",
 ]
 GOOGLE_CLIENT_ID = "343317132434-2lmlvnemjrklo1jmlghs8ujkr35seahu.apps.googleusercontent.com"
 
