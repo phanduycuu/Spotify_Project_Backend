@@ -13,3 +13,7 @@ class FriendSerializer(serializers.ModelSerializer):
         model = Friend
         fields = '__all__'
         read_only_fields = ['user1', 'created_at']
+class FriendAPISerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Friend
+        fields = '__all__'
