@@ -225,7 +225,7 @@ class AccountViewSet(viewsets.ModelViewSet):
         friends = Account.objects.filter(
             models.Q(friends1__user2=user, friends1__status="accepted") | 
             models.Q(friends2__user1=user, friends2__status="accepted")
-        )
+        ).distinct()
         return Response(AccountSerializer(friends, many=True).data, status=status.HTTP_200_OK)
 
     @action(detail=False, methods=['get'], permission_classes=[IsAuthenticated])
