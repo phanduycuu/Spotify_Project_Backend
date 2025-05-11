@@ -19,6 +19,8 @@ from google.oauth2 import id_token
 from google.auth.transport import requests
 from django.conf import settings
 from role.models import Role
+from channels.layers import get_channel_layer
+from asgiref.sync import async_to_sync
 # Create your views here.
 class AccountViewSet(viewsets.ModelViewSet):
     queryset = Account.objects.filter(is_deleted=False)
@@ -131,7 +133,7 @@ class AccountViewSet(viewsets.ModelViewSet):
             friendship = Friend.objects.filter(
                 models.Q(user1=user1, user2=user2) | models.Q(user1=user2, user2=user1)
             ).first()
-
+            channel_layer = get_channel_layer()
             if friendship:
                 if friendship.status == "accepted":
                     return Response({"error": "Hai người đã là bạn bè"}, status=status.HTTP_400_BAD_REQUEST)
@@ -143,10 +145,27 @@ class AccountViewSet(viewsets.ModelViewSet):
                     friendship.user2 = user2
                     friendship.status = "pending"
                     friendship.save()
+                    # Gửi realtime cho user2
+                    async_to_sync(channel_layer.group_send)(
+                        f"user_{user2.id}",
+                        {
+                            "type": "friend_update",
+                            "action": "new_request",
+                            "message": f"{user1.username} đã gửi lại lời mời kết bạn"
+                        }
+                    )
                     return Response({"message": "Lời mời kết bạn đã được gửi lại"}, status=status.HTTP_200_OK)
 
             # Nếu chưa có mối quan hệ nào
             Friend.objects.create(user1=user1, user2=user2, status="pending")
+            async_to_sync(channel_layer.group_send)(
+                f"user_{user2.id}",
+                {
+                    "type": "friend_update",
+                    "action": "new_request",
+                    "message": f"{user1.username} đã gửi lời mời kết bạn"
+                }
+            )
             return Response({"message": "Lời mời kết bạn đã được gửi"}, status=status.HTTP_201_CREATED)
 
         except Account.DoesNotExist:
@@ -164,15 +183,32 @@ class AccountViewSet(viewsets.ModelViewSet):
 
         try:
             friendship = Friend.objects.get(user1__id=pk, user2=user2, status="pending")
-
+            channel_layer = get_channel_layer()
             if action == "accepted":
                 friendship.status = "accepted"
                 friendship.save()
+                async_to_sync(channel_layer.group_send)(
+                    f"user_{friendship.user1.id}",
+                    {
+                        "type": "friend_update",
+                        "action": "request_accepted",
+                        "message": f"{user2.username} đã chấp nhận lời mời kết bạn"
+                    }
+                )
+
                 return Response({"message": "Đã chấp nhận lời mời kết bạn"}, status=status.HTTP_200_OK)
 
             elif action == "declined":
                 friendship.status = "declined"
                 friendship.save()
+                async_to_sync(channel_layer.group_send)(
+                    f"user_{friendship.user1.id}",
+                    {
+                        "type": "friend_update",
+                        "action": "request_declined",
+                        "message": f"{user2.username} đã từ chối lời mời kết bạn"
+                    }
+                )
                 return Response({"message": "Đã từ chối lời mời kết bạn"}, status=status.HTTP_200_OK)
 
         except friendship.DoesNotExist:
@@ -258,7 +294,7 @@ class AuthViewSet(viewsets.ViewSet):
 
             try:
                 # Tìm hoặc tạo người dùng
-                default_role, _ = Role.objects.get_or_create(name='user')
+                default_role, _ = Role.objects.get_or_create(name='User')
                 
                 user, created = Account.objects.get_or_create(
                     email=email,
