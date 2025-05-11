@@ -151,7 +151,7 @@ class AccountViewSet(viewsets.ModelViewSet):
                         {
                             "type": "friend_update",
                             "action": "new_request",
-                            "message": f"{user1.username} đã gửi lại lời mời kết bạn"
+                            "message": f"{user1.full_name} đã gửi lại lời mời kết bạn"
                         }
                     )
                     return Response({"message": "Lời mời kết bạn đã được gửi lại"}, status=status.HTTP_200_OK)
@@ -163,7 +163,7 @@ class AccountViewSet(viewsets.ModelViewSet):
                 {
                     "type": "friend_update",
                     "action": "new_request",
-                    "message": f"{user1.username} đã gửi lời mời kết bạn"
+                    "message": f"{user1.full_name} đã gửi lời mời kết bạn"
                 }
             )
             return Response({"message": "Lời mời kết bạn đã được gửi"}, status=status.HTTP_201_CREATED)
@@ -192,7 +192,7 @@ class AccountViewSet(viewsets.ModelViewSet):
                     {
                         "type": "friend_update",
                         "action": "request_accepted",
-                        "message": f"{user2.username} đã chấp nhận lời mời kết bạn"
+                        "message": f"{user2.full_name} đã chấp nhận lời mời kết bạn"
                     }
                 )
 
@@ -206,7 +206,7 @@ class AccountViewSet(viewsets.ModelViewSet):
                     {
                         "type": "friend_update",
                         "action": "request_declined",
-                        "message": f"{user2.username} đã từ chối lời mời kết bạn"
+                        "message": f"{user2.full_name} đã từ chối lời mời kết bạn"
                     }
                 )
                 return Response({"message": "Đã từ chối lời mời kết bạn"}, status=status.HTTP_200_OK)
