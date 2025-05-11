@@ -238,7 +238,7 @@ class AccountViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['get'], url_path='get-favourite-albums/(?P<account_id>[^/.]+)')
     def get_favourite_albums(self, request, account_id=None):
         account = get_object_or_404(Account, pk=account_id, is_deleted=False)
-        favourite_relations = account.account_favourite_albums.filter(is_deleted=False).select_related('album')
+        favourite_relations = account.account_favourite_albums.filter(is_deleted=False,album__is_deleted=False).select_related('album')
         serializer = FavouriteAlbumUserSerializer(favourite_relations, many=True, context={'request': request})
         return Response(serializer.data, status=status.HTTP_200_OK)
     
@@ -252,7 +252,7 @@ class AccountViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['get'], url_path='get-favourite-songs/(?P<account_id>[^/.]+)')
     def get_favourite_songs(self, request, account_id=None):
         account = get_object_or_404(Account, pk=account_id, is_deleted=False)
-        favourite_relations = account.account_favourite_songs.filter(is_deleted=False).select_related('song')
+        favourite_relations = account.account_favourite_songs.filter(is_deleted=False,song__is_deleted=False).select_related('song')
         serializer = FavouriteSongUserSerializer(favourite_relations, many=True, context={'request': request})
         return Response(
             serializer.data

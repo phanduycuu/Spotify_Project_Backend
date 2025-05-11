@@ -207,5 +207,5 @@ CHANNEL_LAYERS = {
 
 SECURE_SSL_REDIRECT = False
 
-MEDIA_URL = '/media/'
+MEDIA_URL = 'https://54.89.188.157/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
