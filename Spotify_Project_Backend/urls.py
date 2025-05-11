@@ -33,7 +33,7 @@ urlpatterns = [
     path('api/roles/', include('role.urls')),
     path('api/favourite-albums/', include('favourite_album.urls')),
     path('api/favourite-songs/', include('favourite_song.urls')),
-    path('', include('chat.urls')),
+    path('api/', include('chat.urls')),
     path('api/client/songs/', include('songClient.urls')),  # API cho client
     path('api/songs/', include('song.urls')),
     path('api/album-songs/', include('album_song.urls')),
