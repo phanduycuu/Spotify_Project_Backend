@@ -8,7 +8,7 @@ from rest_framework.response import Response
 class SongViewSet(viewsets.ModelViewSet):
     queryset = Song.objects.filter(is_deleted=False).order_by('-created_at')
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
-    search_fields = ['name','genre']
+    search_fields = ['name']
     ordering_fields = ['name', 'created_at']
 
     def get_serializer_class(self):
